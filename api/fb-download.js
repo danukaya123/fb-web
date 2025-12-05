@@ -1,7 +1,6 @@
-// api/fb-download.js
-const fetch = require("node-fetch");
-
 module.exports = async function handler(req, res) {
+  const fetch = (await import("node-fetch")).default;
+
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -14,15 +13,12 @@ module.exports = async function handler(req, res) {
 
     const filename = "facebook_video.mp4";
 
-    // Fetch video from FB CDN
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch video");
 
-    // Force download headers
     res.setHeader("Content-Type", "video/mp4");
     res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
 
-    // Stream to browser
     response.body.pipe(res);
   } catch (err) {
     console.error("FB Download error:", err);
