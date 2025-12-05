@@ -37,7 +37,8 @@
       status.innerHTML = "<p class='text-gray-600'>Fetching video info...</p>";
 
       try {
-        const res = await fetch(`/api/fb?q=${encodeURIComponent(url)}`);
+        // Call metadata API
+        const res = await fetch(`/api/fb-info?q=${encodeURIComponent(url)}`);
         const data = await res.json();
 
         if (!data.ok) {
@@ -48,7 +49,7 @@
         const { title, urls, thumbnail } = data;
         const safeTitle = title.replace(/[^a-z0-9]/gi, "_").toLowerCase();
 
-        // Clear previous buttons
+        // Display video info
         status.innerHTML = `
           <h2 class="text-lg font-semibold mb-2">${title}</h2>
           ${thumbnail ? `<img src="${thumbnail}" class="w-full max-w-md rounded mb-4"/>` : ""}
@@ -57,14 +58,16 @@
         const container = document.createElement("div");
         container.className = "flex gap-2 flex-wrap";
 
+        // Create download buttons
         const createDownloadButton = (label, videoUrl) => {
           const btn = document.createElement("button");
           btn.textContent = label;
           btn.className = "bg-green-600 hover:bg-green-700 text-white p-2 rounded font-medium transition";
           btn.addEventListener("click", () => {
+            // Call fb-download API to force download
             const a = document.createElement("a");
-            a.href = videoUrl;
-            a.download = `${safeTitle}_${label}.mp4`; // force download
+            a.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}`;
+            a.download = `${safeTitle}_${label}.mp4`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
