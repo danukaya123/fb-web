@@ -1,6 +1,6 @@
 module.exports = async function handler(req, res) {
   const fetch = (await import("node-fetch")).default;
-  const he = await import("he");
+  const he = (await import("he")).default; // <-- fix here
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
