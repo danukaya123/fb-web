@@ -1,92 +1,1275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Facebook Video Downloader</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-  <div class="w-full max-w-xl bg-white rounded-xl shadow-lg p-6">
-    <h1 class="text-2xl font-bold text-center mb-6">📥 Facebook Video Downloader</h1>
-
-    <input
-      type="text"
-      id="fb-url"
-      placeholder="Paste Facebook video URL here"
-      class="border p-3 rounded w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
-
-    <button
-      id="fetchFbBtn"
-      class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded w-full font-semibold transition"
-    >
-      Get Video
-    </button>
-
-    <div id="fb-status" class="mt-6"></div>
-  </div>
-
-  <script>
-    const status = document.getElementById("fb-status");
-
-    document.getElementById("fetchFbBtn").addEventListener("click", async () => {
-      const url = document.getElementById("fb-url").value.trim();
-      if (!url) return alert("Please paste a Facebook video URL!");
-
-      status.innerHTML = "<p class='text-gray-600'>Fetching video info...</p>";
-
-      try {
-        // Call metadata API
-        const res = await fetch(`/api/fb-info?q=${encodeURIComponent(url)}`);
-        const data = await res.json();
-
-        if (!data.ok) {
-          status.innerHTML = `<p class="text-red-500">${data.message || data.error}</p>`;
-          return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Facebook Video Downloader - Quizontal | Download FB Videos in HD/SD</title>
+    <meta name="description" content="Download Facebook videos in HD/SD quality for free. No registration required. Fast, easy, and unlimited downloads.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE STYLES ========== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* ========== LAYOUT CONTAINERS ========== */
+        .content-container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .content-container {
+                padding: 0 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .content-container {
+                padding: 0 2rem;
+            }
+        }
+        
+        /* ========== NAVIGATION - EXACT COPY FROM HOMEPAGE ========== */
+        header {
+            width: 100%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .nav-container {
+                padding: 0 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .nav-container {
+                padding: 0 2rem;
+            }
+        }
+        
+        /* Logo */
+        .nav-logo {
+            height: 40px;
+            width: auto;
+            max-width: 180px;
+            object-fit: contain;
+        }
+        
+        @media (max-width: 640px) {
+            .nav-logo {
+                height: 36px;
+                max-width: 150px;
+            }
+        }
+        
+        /* Desktop Navigation */
+        .desktop-nav {
+            display: none;
+        }
+        
+        @media (min-width: 1024px) {
+            .desktop-nav {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+        }
+        
+        /* Navigation Links */
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #374151;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            height: 44px;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(124, 58, 237, 0.05);
+            color: #7c3aed;
+        }
+        
+        .nav-link i {
+            margin-left: 0.25rem;
+            transition: transform 0.2s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: rotate(180deg);
+        }
+        
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            min-width: 120px;
+        }
+        
+        @media (min-width: 640px) {
+            .search-container {
+                min-width: 200px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .search-container {
+                min-width: 240px;
+            }
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.625rem 1rem 0.625rem 2.5rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.75rem;
+            outline: none;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+        }
+        
+        .search-input:focus {
+            border-color: #7c3aed;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            pointer-events: none;
+        }
+        
+        /* FIXED: Navigation Dropdown */
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-dropdown {
+            position: absolute;
+            top: calc(100% + 15px);
+            left: 0;
+            width: 800px;
+            max-width: 33vw;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 1.5rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #f3f4f6;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 1024px) {
+            .nav-dropdown {
+                width: 600px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-dropdown {
+                width: 400px;
+                left: -100%;
+            }
+        }
+        
+        /* Hover functionality fixed */
+        .nav-item:hover .nav-dropdown,
+        .nav-dropdown:hover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        /* Dropdown content grids */
+        .nav-image-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .nav-image-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .nav-image-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        const { title, urls, thumbnail } = data;
-        const safeTitle = title.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+        /* CTA Button */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #7c3aed;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            height: 44px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .cta-button:hover {
+            background-color: #6d28d9;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+        }
+        
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 0.5rem;
+            background: transparent;
+            border: none;
+            color: #374151;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .mobile-menu-btn:hover {
+            background-color: rgba(124, 58, 237, 0.05);
+        }
+        
+        @media (min-width: 1024px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        /* ========== HERO SECTION ========== */
+        .hero-section {
+            position: relative;
+            color: white;
+            overflow: hidden;
+            min-height: 400px;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(59, 89, 152, 0.9), rgba(59, 89, 152, 0.8)),
+                        url('https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* ========== DOWNLOADER SECTION ========== */
+        .downloader-section {
+            padding: 4rem 0;
+            background: linear-gradient(to bottom, #f9fafb, #ffffff);
+        }
+        
+        .url-input-container {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .url-input-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .url-input {
+            width: 100%;
+            padding: 1.25rem 1.5rem 1.25rem 3.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            font-size: 1rem;
+            background: #f9fafb;
+            transition: all 0.3s ease;
+        }
+        
+        .url-input:focus {
+            border-color: #3b5998;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.1);
+            outline: none;
+        }
+        
+        .url-input-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #3b5998, #1877f2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(59, 89, 152, 0.2);
+        }
+        
+        .download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .download-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+        
+        .download-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            left: calc(50% - 10px);
+            top: calc(50% - 10px);
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ========== VIDEO INFO CARD ========== */
+        .video-info-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            max-width: 800px;
+            margin: 2rem auto;
+            display: none;
+        }
+        
+        .video-info-card.show {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .video-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+        
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .download-option {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .download-option:hover {
+            border-color: #3b5998;
+            background: white;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(59, 89, 152, 0.1);
+        }
+        
+        .download-option h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .download-option p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        .quality-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .quality-badge.hd {
+            background: #10b981;
+            color: white;
+        }
+        
+        .quality-badge.sd {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        /* ========== HOW IT WORKS ========== */
+        .steps-section {
+            padding: 4rem 0;
+            background: #f9fafb;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b5998, #1877f2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+        
+        /* ========== MOBILE MENU ========== */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 9999;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+            display: block;
+        }
+        
+        .mobile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .mobile-nav {
+            padding: 1rem;
+        }
+        
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #374151;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease;
+            margin-bottom: 0.25rem;
+        }
+        
+        .mobile-nav-link:hover,
+        .mobile-nav-link.active {
+            background-color: #f9fafb;
+            color: #7c3aed;
+        }
+        
+        .mobile-cta {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            position: sticky;
+            bottom: 0;
+        }
+        
+        /* ========== NOTIFICATIONS ========== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #10b981;
+            z-index: 1001;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 400px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            border-left-color: #ef4444;
+        }
+        
+        .notification.warning {
+            border-left-color: #f59e0b;
+        }
+        
+        /* ========== FOOTER STYLES ========== */
+        .footer-logo {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+        
+        /* ========== RESPONSIVE ADJUSTMENTS ========== */
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 50vh;
+                min-height: 350px;
+            }
+            
+            .video-thumbnail {
+                height: 200px;
+            }
+            
+            .download-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .url-input-container,
+            .video-info-card {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-section {
+                height: 45vh;
+                min-height: 300px;
+            }
+            
+            .video-title {
+                font-size: 1.25rem;
+            }
+            
+            .step-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white">
 
+    <!-- Fixed Navigation -->
+    <header>
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="/" class="flex items-center">
+                <img 
+                    src="https://github.com/danukaya123/quizontal-pro/blob/main/download%20(3).png?raw=true" 
+                    alt="Quizontal Logo" 
+                    class="nav-logo"
+                >
+            </a>
+
+            <!-- Desktop Search Bar -->
+            <div class="search-container hidden lg:block">
+                <form action="https://wall-rust.vercel.app/" method="GET" target="_blank">
+                    <i data-lucide="search" class="search-icon h-4 w-4"></i>
+                    <input 
+                        type="search" 
+                        name="q"
+                        placeholder="Search images, wallpapers, videos..." 
+                        class="search-input"
+                        required
+                    >
+                </form>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <div class="nav-item">
+                    <a href="copyright-free-images.html" class="nav-link">
+                        <span>Images</span>
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="videos.html" class="nav-link">
+                        <span>Videos</span>
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="wallpapers.html" class="nav-link">
+                        <span>Wallpapers</span>
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="ai-tools.html" class="nav-link">
+                        <span>AI Tools</span>
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="facebook-downloader.html" class="nav-link active">
+                        <span>FB Downloader</span>
+                    </a>
+                </div>
+                
+                <a href="#pricing" class="nav-link">Pricing</a>
+      
+                <button class="cta-button ml-2">
+                    Get Started Free
+                </button>
+            </nav>
+
+            <!-- Mobile Search and Menu -->
+            <div class="flex items-center gap-4 lg:hidden">
+                <div class="search-container">
+                    <form action="https://wall-rust.vercel.app/" method="GET" target="_blank">
+                        <i data-lucide="search" class="search-icon h-4 w-4"></i>
+                        <input 
+                            type="search" 
+                            name="q"
+                            placeholder="Search..." 
+                            class="search-input"
+                            required
+                        >
+                    </form>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i data-lucide="menu" class="h-6 w-6"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-header">
+            <a href="/" class="flex items-center">
+                <img 
+                    src="https://github.com/danukaya123/quizontal-pro/blob/main/download%20(3).png?raw=true" 
+                    alt="Quizontal Logo" 
+                    class="h-10 w-auto max-w-[160px]"
+                >
+            </a>
+            <button class="mobile-menu-btn" onclick="closeMobileMenu()">
+                <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-nav">
+            <a href="/" class="mobile-nav-link">
+                <i data-lucide="home" class="h-5 w-5 mr-3"></i>
+                Home
+            </a>
+            <a href="copyright-free-images.html" class="mobile-nav-link">
+                <i data-lucide="image" class="h-5 w-5 mr-3"></i>
+                Free Images
+            </a>
+            <a href="videos.html" class="mobile-nav-link">
+                <i data-lucide="video" class="h-5 w-5 mr-3"></i>
+                Videos
+            </a>
+            <a href="wallpapers.html" class="mobile-nav-link">
+                <i data-lucide="layout" class="h-5 w-5 mr-3"></i>
+                Wallpapers
+            </a>
+            <a href="ai-tools.html" class="mobile-nav-link">
+                <i data-lucide="zap" class="h-5 w-5 mr-3"></i>
+                AI Generator
+            </a>
+            <a href="facebook-downloader.html" class="mobile-nav-link active">
+                <i data-lucide="download" class="h-5 w-5 mr-3"></i>
+                FB Downloader
+            </a>
+        </div>
+        
+        <div class="mobile-cta">
+            <button class="cta-button w-full" onclick="closeMobileMenu()">
+                Get Started Free
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="content-container">
+            <div class="hero-content">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    Download Facebook Videos
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-100 mb-8 max-w-2xl mx-auto">
+                    Download any Facebook video in HD or SD quality. Free, fast, and no registration required.
+                </p>
+                
+                <div class="url-input-container">
+                    <div class="url-input-wrapper">
+                        <i data-lucide="link" class="url-input-icon h-6 w-6"></i>
+                        <input 
+                            type="text" 
+                            id="fbUrlInput"
+                            placeholder="Paste Facebook video URL here (e.g., https://www.facebook.com/...)"
+                            class="url-input"
+                        >
+                    </div>
+                    <button id="downloadBtn" class="download-btn">
+                        <i data-lucide="download" class="h-5 w-5 mr-2 inline"></i>
+                        Download Video
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Info Section -->
+    <section class="downloader-section">
+        <div class="content-container">
+            <div id="videoInfoCard" class="video-info-card">
+                <!-- Video info will be displayed here -->
+            </div>
+            
+            <div class="text-center mt-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">How to Download Facebook Videos</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Follow these simple steps to download any Facebook video in seconds
+                </p>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <i data-lucide="copy" class="h-12 w-12 text-blue-600 mb-4 mx-auto"></i>
+                        <h3 class="text-xl font-semibold mb-2">Copy Video URL</h3>
+                        <p class="text-gray-600">Go to Facebook and copy the video link from share option</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <i data-lucide="clipboard-paste" class="h-12 w-12 text-blue-600 mb-4 mx-auto"></i>
+                        <h3 class="text-xl font-semibold mb-2">Paste URL</h3>
+                        <p class="text-gray-600">Paste the URL into the input field above</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <i data-lucide="download" class="h-12 w-12 text-blue-600 mb-4 mx-auto"></i>
+                        <h3 class="text-xl font-semibold mb-2">Choose Quality</h3>
+                        <p class="text-gray-600">Select HD or SD quality and download your video</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="mt-16 max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Frequently Asked Questions</h2>
+                
+                <div class="space-y-4">
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold mb-2">Is it free to use?</h3>
+                        <p class="text-gray-600">Yes, our Facebook video downloader is completely free with no hidden charges or registration required.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold mb-2">What video qualities are available?</h3>
+                        <p class="text-gray-600">You can download videos in both HD (High Definition) and SD (Standard Definition) quality, depending on what's available from the source.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold mb-2">Does it work on mobile?</h3>
+                        <p class="text-gray-600">Yes, our downloader is fully responsive and works perfectly on all devices including smartphones and tablets.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold mb-2">Are downloads private?</h3>
+                        <p class="text-gray-600">Yes, all downloads are processed securely and we don't store any videos on our servers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="content-container py-12">
+            <!-- Newsletter -->
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-6 md:p-8 mb-8 md:mb-12">
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
+                    <div>
+                        <h3 class="text-xl md:text-2xl font-bold mb-3">Stay Updated with Creative Insights</h3>
+                        <p class="text-blue-100 text-sm md:text-base">
+                            Subscribe to our newsletter for the latest video trends and AI tips.
+                        </p>
+                    </div>
+                    <div>
+                        <form id="newsletterForm" class="flex flex-col sm:flex-row gap-3 md:gap-4">
+                            <input 
+                                type="email" 
+                                placeholder="Enter your email address" 
+                                class="flex-1 px-4 md:px-6 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent text-sm md:text-base"
+                                required
+                            >
+                            <button 
+                                type="submit" 
+                                class="bg-white text-purple-600 px-6 md:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors whitespace-nowrap text-sm md:text-base"
+                            >
+                                Subscribe
+                            </button>
+                        </form>
+                        <p class="text-xs md:text-sm text-blue-200 mt-2 md:mt-3">By subscribing, you agree to our Privacy Policy.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Links -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 mb-8 md:mb-12">
+                <!-- Logo and Social -->
+                <div class="col-span-2 md:col-span-2">
+                    <a href="/" class="inline-block mb-4">
+                        <img 
+                            src="https://github.com/danukaya123/quizontal-pro/blob/main/download%20(3).png?raw=true" 
+                            alt="Quizontal Logo" 
+                            class="footer-logo"
+                        >
+                    </a>
+                    <p class="mt-2 md:mt-4 text-gray-400 text-sm mb-4 md:mb-6">
+                        Quizontal is a free and easy-to-use platform that provides high-quality stock videos and HD footage for both personal and commercial use. 
+                    </p>
+                    <div class="flex space-x-3 md:space-x-4">
+                        <a href="#" class="bg-gray-800 hover:bg-purple-600 text-white p-2.5 md:p-3 rounded-full transition-colors">
+                            <i data-lucide="facebook" class="h-4 w-4 md:h-5 md:w-5"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-purple-600 text-white p-2.5 md:p-3 rounded-full transition-colors">
+                            <i data-lucide="youtube" class="h-4 w-4 md:h-5 md:w-5"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-purple-600 text-white p-2.5 md:p-3 rounded-full transition-colors">
+                            <i data-lucide="linkedin" class="h-4 w-4 md:h-5 md:w-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product Column -->
+                <div>
+                    <h3 class="text-base md:text-lg font-semibold mb-4 text-white">Services</h3>
+                    <ul class="space-y-2 md:space-y-3 text-sm text-gray-400">
+                        <li><a href="copyright-free-images.html" class="hover:text-white transition-colors block">Images</a></li>
+                        <li><a href="wallpapers.html" class="hover:text-white transition-colors block">Wallpapers</a></li>
+                        <li><a href="videos.html" class="hover:text-white transition-colors block">Videos</a></li>
+                        <li><a href="ai-tools.html" class="hover:text-white transition-colors block">AI Generator</a></li>
+                        <li><a href="facebook-downloader.html" class="hover:text-white transition-colors block">FB Downloader</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company Column -->
+                <div>
+                    <h3 class="text-base md:text-lg font-semibold mb-4 text-white">Company</h3>
+                    <ul class="space-y-2 md:space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors block">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors block">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors block">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support Column -->
+                <div>
+                    <h3 class="text-base md:text-lg font-semibold mb-4 text-white">Support</h3>
+                    <ul class="space-y-2 md:space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors block">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors block">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors block">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-xs md:text-sm text-center md:text-left mb-4 md:mb-0">
+                    © 2025 Quizontal. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Element -->
+    <div id="notification" class="notification">
+        <p id="notificationMessage">Download started successfully!</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // ========== MOBILE MENU ==========
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ========== NOTIFICATION SYSTEM ==========
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            messageEl.textContent = message;
+            notification.className = 'notification';
+            
+            if (type === 'error') {
+                notification.classList.add('error');
+            } else if (type === 'warning') {
+                notification.classList.add('warning');
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // ========== FACEBOOK VIDEO DOWNLOADER ==========
+        const fbUrlInput = document.getElementById('fbUrlInput');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const videoInfoCard = document.getElementById('videoInfoCard');
+        
+        // Validate Facebook URL
+        function isValidFacebookUrl(url) {
+            const patterns = [
+                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/.*\/videos\/.*/,
+                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/.*\/video\.php\?.*/,
+                /(?:https?:\/\/)?(?:www\.)?fb\.watch\/.*/,
+                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/reel\/.*/
+            ];
+            
+            return patterns.some(pattern => pattern.test(url));
+        }
+        
+        // Fetch video info from your API
+        async function fetchVideoInfo(url) {
+            try {
+                downloadBtn.disabled = true;
+                downloadBtn.classList.add('loading');
+                downloadBtn.innerHTML = 'Processing...';
+                
+                const response = await fetch(`/api/fb-info?q=${encodeURIComponent(url)}`);
+                const data = await response.json();
+                
+                if (!data.ok) {
+                    throw new Error(data.message || 'Failed to fetch video info');
+                }
+                
+                return data;
+            } catch (error) {
+                throw error;
+            } finally {
+                downloadBtn.disabled = false;
+                downloadBtn.classList.remove('loading');
+                downloadBtn.innerHTML = '<i data-lucide="download" class="h-5 w-5 mr-2 inline"></i>Download Video';
+            }
+        }
+        
         // Display video info
-        status.innerHTML = `
-          <h2 class="text-lg font-semibold mb-2">${title}</h2>
-          ${thumbnail ? `<img src="${thumbnail}" class="w-full max-w-md rounded mb-4"/>` : ""}
-        `;
-
-        const container = document.createElement("div");
-        container.className = "flex gap-2 flex-wrap";
-
-        // Create download buttons
-const createDownloadButton = (label, videoUrl) => {
-  const btn = document.createElement("button");
-  btn.textContent = label;
-  btn.className = "bg-green-600 hover:bg-green-700 text-white p-2 rounded font-medium transition";
-
-  btn.addEventListener("click", () => {
-    const a = document.createElement("a");
-    a.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}&title=${encodeURIComponent(title)}`;
-    a.download = ""; // this ensures the browser treats it as download
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  });
-
-  return btn;
-};
-
-
-        if (urls.hd) container.appendChild(createDownloadButton("HD", urls.hd));
-        if (urls.sd) container.appendChild(createDownloadButton("SD", urls.sd));
-
-        status.appendChild(container);
-
-      } catch (e) {
-        console.error(e);
-        status.innerHTML = "<p class='text-red-500'>Failed to fetch video. Try again.</p>";
-      }
-    });
-  </script>
+        function displayVideoInfo(videoData) {
+            const { title, thumbnail, urls } = videoData;
+            
+            const videoInfoHTML = `
+                ${thumbnail ? `
+                    <img src="${thumbnail}" alt="${title}" class="video-thumbnail">
+                ` : ''}
+                
+                <h2 class="video-title">${title}</h2>
+                
+                <div class="download-options">
+                    ${urls.hd ? `
+                        <div class="download-option" onclick="downloadVideo('${urls.hd}', '${title}', 'hd')">
+                            <span class="quality-badge hd">HD QUALITY</span>
+                            <h4>High Definition</h4>
+                            <p>Best quality video with 720p/1080p resolution</p>
+                            <button class="cta-button w-full">
+                                <i data-lucide="download" class="h-4 w-4 mr-2"></i>
+                                Download HD
+                            </button>
+                        </div>
+                    ` : ''}
+                    
+                    ${urls.sd ? `
+                        <div class="download-option" onclick="downloadVideo('${urls.sd}', '${title}', 'sd')">
+                            <span class="quality-badge sd">SD QUALITY</span>
+                            <h4>Standard Definition</h4>
+                            <p>Good quality video with smaller file size</p>
+                            <button class="cta-button w-full">
+                                <i data-lucide="download" class="h-4 w-4 mr-2"></i>
+                                Download SD
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                ${!urls.hd && !urls.sd ? `
+                    <div class="text-center py-8">
+                        <i data-lucide="alert-circle" class="h-16 w-16 text-yellow-500 mx-auto mb-4"></i>
+                        <p class="text-gray-600">No download links available for this video.</p>
+                    </div>
+                ` : ''}
+            `;
+            
+            videoInfoCard.innerHTML = videoInfoHTML;
+            videoInfoCard.classList.add('show');
+            
+            // Scroll to video info
+            videoInfoCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Re-initialize Lucide icons for new content
+            lucide.createIcons();
+        }
+        
+        // Download video function
+        function downloadVideo(videoUrl, title, quality) {
+            try {
+                showNotification(`Starting ${quality.toUpperCase()} download...`, 'success');
+                
+                // Create a temporary link element
+                const link = document.createElement('a');
+                link.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}&title=${encodeURIComponent(title)}`;
+                link.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${quality}.mp4`;
+                link.target = '_blank';
+                
+                // Append to body, click, and remove
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showNotification(`Download started! Your video will save as "${link.download}"`, 'success');
+            } catch (error) {
+                console.error('Download error:', error);
+                showNotification('Failed to start download. Please try again.', 'error');
+            }
+        }
+        
+        // Handle download button click
+        downloadBtn.addEventListener('click', async () => {
+            const url = fbUrlInput.value.trim();
+            
+            if (!url) {
+                showNotification('Please enter a Facebook video URL', 'warning');
+                fbUrlInput.focus();
+                return;
+            }
+            
+            if (!isValidFacebookUrl(url)) {
+                showNotification('Please enter a valid Facebook video URL', 'error');
+                return;
+            }
+            
+            try {
+                const videoData = await fetchVideoInfo(url);
+                displayVideoInfo(videoData);
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification(error.message || 'Failed to fetch video. Please check the URL and try again.', 'error');
+            }
+        });
+        
+        // Handle Enter key press
+        fbUrlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                downloadBtn.click();
+            }
+        });
+        
+        // ========== NEWSLETTER FORM ==========
+        const newsletterForm = document.getElementById('newsletterForm');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = newsletterForm.querySelector('input[type="email"]').value;
+                if (email) {
+                    showNotification('Thank you for subscribing to our newsletter!', 'success');
+                    newsletterForm.reset();
+                }
+            });
+        }
+        
+        // ========== SMOOTH SCROLLING ==========
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // ========== AUTO-PASTE FROM CLIPBOARD ==========
+        fbUrlInput.addEventListener('focus', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text && isValidFacebookUrl(text)) {
+                    fbUrlInput.value = text;
+                    showNotification('Facebook URL pasted from clipboard!', 'success');
+                }
+            } catch (err) {
+                // Clipboard access might be blocked, ignore
+            }
+        });
+    </script>
 </body>
 </html>
