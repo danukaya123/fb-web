@@ -63,15 +63,12 @@
           const btn = document.createElement("button");
           btn.textContent = label;
           btn.className = "bg-green-600 hover:bg-green-700 text-white p-2 rounded font-medium transition";
-          btn.addEventListener("click", () => {
-            // Call fb-download API to force download
-            const a = document.createElement("a");
-            a.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}`;
-            a.download = `${safeTitle}_${label}.mp4`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          });
+btn.addEventListener("click", () => {
+  const a = document.createElement("a");
+  // Pass both URL and title
+  a.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}&title=${encodeURIComponent(title)}`;
+  a.click();
+});
           return btn;
         };
 
