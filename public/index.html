@@ -1,71 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Facebook Video Downloader</title>
-  <meta name="description" content="Download Facebook videos in HD or SD quickly.">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facebook Video Downloader</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-  <div class="w-full max-w-3xl p-4">
-    <div class="bg-white rounded-xl p-6 shadow-xl">
-      <h1 class="text-2xl font-bold mb-4 text-center">Facebook Video Downloader</h1>
-      <p class="text-center text-gray-600 mb-6">Paste a Facebook video URL below to fetch and download it in HD or SD.</p>
+<div class="max-w-lg w-full bg-white rounded-xl shadow-lg p-6">
+  <h1 class="text-2xl font-bold mb-4 text-center">Facebook Video Downloader</h1>
 
-      <input
-        type="text"
-        id="fb-url"
-        placeholder="Paste Facebook video URL here"
-        class="border p-3 rounded w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+  <input type="text" id="fb-url" placeholder="Paste Facebook video URL here"
+         class="border p-3 rounded w-full mb-4 focus:outline-blue-500" />
 
-      <button
-        id="fetchFbBtn"
-        class="bg-blue-600 text-white p-3 rounded w-full mb-4 hover:bg-blue-700 transition-colors"
-      >
-        Get Video
-      </button>
+  <button id="fetchFbBtn" class="bg-blue-600 text-white p-3 rounded w-full mb-4 hover:bg-blue-700">
+    Fetch Video
+  </button>
 
-      <div id="fb-status" class="mt-4 text-center"></div>
-    </div>
-  </div>
+  <div id="fb-status" class="mt-4"></div>
+</div>
 
-  <script>
-    const status = document.getElementById("fb-status");
+<script>
+const status = document.getElementById("fb-status");
+const fetchBtn = document.getElementById("fetchFbBtn");
 
-    document.getElementById("fetchFbBtn").addEventListener("click", async () => {
-      const url = document.getElementById("fb-url").value.trim();
-      if (!url) return alert("Please paste a Facebook video URL!");
+fetchBtn.addEventListener("click", async () => {
+  const url = document.getElementById("fb-url").value.trim();
+  if (!url) return alert("Paste a Facebook video URL!");
 
-      status.innerHTML = "<p class='text-gray-500'>Fetching video info...</p>";
+  status.innerHTML = `<p class="text-gray-500">Fetching video info...</p>`;
 
-      try {
-        const res = await fetch(`/api/fb?q=${encodeURIComponent(url)}`);
-        const data = await res.json();
+  try {
+    const res = await fetch(`/api/fb?q=${encodeURIComponent(url)}`);
+    const data = await res.json();
 
-        if (!data.ok) {
-          status.innerHTML = `<p class="text-red-500">${data.message || data.error}</p>`;
-          return;
-        }
+    if (!data.ok) {
+      status.innerHTML = `<p class="text-red-500">${data.message || data.error}</p>`;
+      return;
+    }
 
-        const { title, urls, thumbnail } = data;
+    const { title, thumbnail, urls } = data;
 
-        let downloadButtons = "";
-        if (urls.hd) downloadButtons += `<a href="${urls.hd}" target="_blank" class="bg-green-600 text-white p-2 rounded mr-2 hover:bg-green-700 transition-colors">Download HD</a>`;
-        if (urls.sd) downloadButtons += `<a href="${urls.sd}" target="_blank" class="bg-gray-600 text-white p-2 rounded hover:bg-gray-700 transition-colors">Download SD</a>`;
+    let buttonsHtml = "";
+    if (urls.hd) buttonsHtml += `<a href="${urls.hd}" download class="bg-green-600 hover:bg-green-700 text-white p-2 rounded mr-2 block text-center mt-2">Download HD</a>`;
+    if (urls.sd) buttonsHtml += `<a href="${urls.sd}" download class="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded block text-center mt-2">Download SD</a>`;
 
-        status.innerHTML = `
-          <h3 class="font-bold text-lg mb-2">${title}</h3>
-          ${thumbnail ? `<img src="${thumbnail}" class="w-full max-w-md mx-auto rounded mb-3"/>` : ""}
-          <div class="mt-2">${downloadButtons}</div>
-        `;
-      } catch (e) {
-        console.error(e);
-        status.innerHTML = "<p class='text-red-500'>Failed to fetch video. Try again.</p>";
-      }
-    });
-  </script>
+    status.innerHTML = `
+      <h2 class="text-xl font-semibold mb-2">${title}</h2>
+      ${thumbnail ? `<img src="${thumbnail}" alt="Thumbnail" class="rounded w-full mb-4"/>` : ""}
+      <div>${buttonsHtml}</div>
+    `;
+  } catch (e) {
+    console.error(e);
+    status.innerHTML = `<p class="text-red-500">Failed to fetch video. Try again.</p>`;
+  }
+});
+</script>
+
 </body>
 </html>
