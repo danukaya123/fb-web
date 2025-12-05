@@ -59,18 +59,23 @@
         container.className = "flex gap-2 flex-wrap";
 
         // Create download buttons
-        const createDownloadButton = (label, videoUrl) => {
-          const btn = document.createElement("button");
-          btn.textContent = label;
-          btn.className = "bg-green-600 hover:bg-green-700 text-white p-2 rounded font-medium transition";
-btn.addEventListener("click", () => {
-  const a = document.createElement("a");
-  // Pass both URL and title
-  a.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}&title=${encodeURIComponent(title)}`;
-  a.click();
-});
-          return btn;
-        };
+const createDownloadButton = (label, videoUrl) => {
+  const btn = document.createElement("button");
+  btn.textContent = label;
+  btn.className = "bg-green-600 hover:bg-green-700 text-white p-2 rounded font-medium transition";
+
+  btn.addEventListener("click", () => {
+    const a = document.createElement("a");
+    a.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}&title=${encodeURIComponent(title)}`;
+    a.download = ""; // this ensures the browser treats it as download
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+
+  return btn;
+};
+
 
         if (urls.hd) container.appendChild(createDownloadButton("HD", urls.hd));
         if (urls.sd) container.appendChild(createDownloadButton("SD", urls.sd));
