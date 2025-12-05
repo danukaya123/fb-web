@@ -1,3 +1,4 @@
+// api/fb-info.js
 const getFbVideoInfo = require("@xaviabot/fb-downloader");
 const he = require("he");
 
@@ -12,16 +13,11 @@ module.exports = async function handler(req, res) {
     const q = (req.query.q || "").toString().trim();
     if (!q) return res.status(400).json({ ok: false, message: "Missing `q` parameter" });
 
-    // Validate Facebook URL
     const fbRegex = /(https?:\/\/)?(www\.)?(facebook|fb)\.com\/.+/;
-    if (!fbRegex.test(q)) {
-      return res.status(400).json({ ok: false, message: "Invalid Facebook URL" });
-    }
+    if (!fbRegex.test(q)) return res.status(400).json({ ok: false, message: "Invalid Facebook URL" });
 
     const result = await getFbVideoInfo(q);
-    if (!result || (!result.sd && !result.hd)) {
-      return res.status(404).json({ ok: false, message: "Video not found or private" });
-    }
+    if (!result || (!result.sd && !result.hd)) return res.status(404).json({ ok: false, message: "Video not found or private" });
 
     const title = he.decode(result.title || "Facebook Video").normalize("NFC");
     const thumbnail = result.thumbnail || null;
