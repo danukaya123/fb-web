@@ -303,20 +303,36 @@
             }
         }
         
-        /* ========== HERO SECTION ========== */
+        /* ========== PREMIUM HERO SECTION ========== */
         .hero-section {
             position: relative;
             color: white;
             overflow: hidden;
-            min-height: 400px;
-            height: 60vh;
+            min-height: 500px;
+            height: 75vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(rgba(59, 89, 152, 0.9), rgba(59, 89, 152, 0.8)),
-                        url('https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background: linear-gradient(135deg, 
+                rgba(59, 89, 152, 0.95) 0%, 
+                rgba(24, 119, 242, 0.9) 50%, 
+                rgba(0, 123, 255, 0.85) 100%),
+                url('https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(59, 89, 152, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(24, 119, 242, 0.3) 0%, transparent 50%);
+            z-index: 1;
         }
         
         .hero-content {
@@ -326,20 +342,71 @@
             text-align: center;
         }
         
-        /* ========== DOWNLOADER SECTION ========== */
-        .downloader-section {
-            padding: 4rem 0;
-            background: linear-gradient(to bottom, #f9fafb, #ffffff);
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* ========== PREMIUM DOWNLOADER SECTION ========== */
+        .downloader-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            position: relative;
+        }
+        
+        .downloader-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, 
+                rgba(59, 89, 152, 0.1) 0%, 
+                transparent 100%);
+            pointer-events: none;
+        }
+        
+        /* ========== URL INPUT WITH DARK TEXT ========== */
         .url-input-container {
-            background: white;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
             border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e5e7eb;
+            padding: 2.5rem;
+            box-shadow: 
+                0 20px 60px rgba(59, 89, 152, 0.15),
+                0 5px 15px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(59, 89, 152, 0.1);
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .url-input-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #3b5998, #1877f2, #3b5998);
         }
         
         .url-input-wrapper {
@@ -349,19 +416,30 @@
         
         .url-input {
             width: 100%;
-            padding: 1.25rem 1.5rem 1.25rem 3.5rem;
-            border: 2px solid #e5e7eb;
+            padding: 1.5rem 1.5rem 1.5rem 3.5rem;
+            border: 2px solid #e2e8f0;
             border-radius: 1rem;
             font-size: 1rem;
-            background: #f9fafb;
+            background: #ffffff;
             transition: all 0.3s ease;
+            color: #1a202c; /* DARK TEXT COLOR */
+            font-weight: 500;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .url-input::placeholder {
+            color: #718096;
+            font-weight: normal;
         }
         
         .url-input:focus {
             border-color: #3b5998;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.1);
+            background: #ffffff;
+            box-shadow: 
+                0 0 0 4px rgba(59, 89, 152, 0.1),
+                inset 0 2px 4px rgba(0, 0, 0, 0.05);
             outline: none;
+            color: #1a202c; /* Ensure dark text on focus */
         }
         
         .url-input-icon {
@@ -369,32 +447,52 @@
             left: 1.5rem;
             top: 50%;
             transform: translateY(-50%);
-            color: #6b7280;
+            color: #718096;
+            z-index: 2;
         }
         
         .download-btn {
-            background: linear-gradient(135deg, #3b5998, #1877f2);
+            background: linear-gradient(135deg, #3b5998 0%, #1877f2 100%);
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            font-size: 1rem;
+            padding: 1.25rem 2.5rem;
+            border-radius: 1rem;
+            font-size: 1.125rem;
             font-weight: 600;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
             margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(59, 89, 152, 0.3);
+        }
+        
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
         
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(59, 89, 152, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(59, 89, 152, 0.4);
+        }
+        
+        .download-btn:hover::before {
+            left: 100%;
         }
         
         .download-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+            transform: none !important;
+            box-shadow: 0 10px 30px rgba(59, 89, 152, 0.2) !important;
         }
         
         .download-btn.loading {
@@ -405,160 +503,209 @@
         .download-btn.loading::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border: 3px solid white;
             border-radius: 50%;
             border-top-color: transparent;
             animation: spin 1s linear infinite;
-            left: calc(50% - 10px);
-            top: calc(50% - 10px);
+            left: calc(50% - 12px);
+            top: calc(50% - 12px);
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
-        /* ========== VIDEO INFO CARD ========== */
+        /* ========== PREMIUM VIDEO INFO CARD ========== */
         .video-info-card {
-            background: white;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
             border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e5e7eb;
+            padding: 3rem;
+            box-shadow: 
+                0 25px 80px rgba(59, 89, 152, 0.15),
+                0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(59, 89, 152, 0.1);
             max-width: 800px;
-            margin: 2rem auto;
+            margin: 3rem auto;
             display: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #10b981, #3b82f6);
         }
         
         .video-info-card.show {
             display: block;
-            animation: fadeInUp 0.6s ease;
+            animation: fadeInUp 0.6s ease-out;
         }
         
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
         
         .video-thumbnail {
             width: 100%;
-            height: 300px;
+            height: 350px;
             object-fit: cover;
             border-radius: 1rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid #e5e7eb;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .video-thumbnail:hover {
+            transform: scale(1.02);
         }
         
         .video-title {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: #1f2937;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             line-height: 1.4;
+            text-align: center;
         }
         
         .download-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
             margin-top: 2rem;
         }
         
         .download-option {
-            background: #f9fafb;
-            border: 2px solid #e5e7eb;
-            border-radius: 1rem;
-            padding: 1.5rem;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            border: 2px solid #e2e8f0;
+            border-radius: 1.25rem;
+            padding: 2rem;
             text-align: center;
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .download-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #3b5998, #1877f2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
         
         .download-option:hover {
             border-color: #3b5998;
-            background: white;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(59, 89, 152, 0.1);
+            background: #ffffff;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(59, 89, 152, 0.15);
+        }
+        
+        .download-option:hover::before {
+            transform: scaleX(1);
         }
         
         .download-option h4 {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 600;
             color: #1f2937;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
         
         .download-option p {
             color: #6b7280;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
         }
         
         .quality-badge {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
+            padding: 0.5rem 1.25rem;
             border-radius: 2rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
         
         .quality-badge.hd {
-            background: #10b981;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
         
         .quality-badge.sd {
-            background: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
         
         /* ========== HOW IT WORKS ========== */
         .steps-section {
-            padding: 4rem 0;
-            background: #f9fafb;
+            padding: 5rem 0;
+            background: #ffffff;
+            position: relative;
         }
         
         .steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
             margin-top: 3rem;
         }
         
         .step-card {
-            background: white;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
             border-radius: 1.5rem;
-            padding: 2rem;
+            padding: 2.5rem;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e5e7eb;
-            transition: transform 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .step-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(59, 89, 152, 0.15);
         }
         
         .step-number {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, #3b5998, #1877f2);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 700;
             margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 20px rgba(59, 89, 152, 0.3);
         }
         
         /* ========== MOBILE MENU ========== */
@@ -577,7 +724,7 @@
         }
         
         .mobile-menu.active {
-            transform: translateX(0);
+            transform: translateY(0);
             display: block;
         }
         
@@ -585,7 +732,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
+            padding: 1.5rem;
             border-bottom: 1px solid #e5e7eb;
             background: white;
             position: sticky;
@@ -594,24 +741,24 @@
         }
         
         .mobile-nav {
-            padding: 1rem;
+            padding: 1.5rem;
         }
         
         .mobile-nav-link {
             display: flex;
             align-items: center;
-            padding: 0.75rem;
+            padding: 1rem;
             width: 100%;
             background: transparent;
             border: none;
             color: #374151;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 500;
             text-align: left;
             cursor: pointer;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             transition: background-color 0.2s ease;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
         
         .mobile-nav-link:hover,
@@ -621,7 +768,7 @@
         }
         
         .mobile-cta {
-            padding: 1rem;
+            padding: 1.5rem;
             border-top: 1px solid #e5e7eb;
             background: #f9fafb;
             position: sticky;
@@ -631,17 +778,20 @@
         /* ========== NOTIFICATIONS ========== */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 30px;
+            right: 30px;
             background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #10b981;
+            padding: 1.25rem 1.75rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid #10b981;
             z-index: 1001;
             transform: translateX(120%);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
         
         .notification.show {
@@ -656,6 +806,10 @@
             border-left-color: #f59e0b;
         }
         
+        .notification-icon {
+            flex-shrink: 0;
+        }
+        
         /* ========== FOOTER STYLES ========== */
         .footer-logo {
             height: 40px;
@@ -664,14 +818,37 @@
         }
         
         /* ========== RESPONSIVE ADJUSTMENTS ========== */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 2.75rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .hero-section {
+                background-attachment: scroll;
+            }
+        }
+        
         @media (max-width: 768px) {
             .hero-section {
-                height: 50vh;
-                min-height: 350px;
+                height: 65vh;
+                min-height: 450px;
+            }
+            
+            .hero-title {
+                font-size: 2.25rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.125rem;
+                padding: 0 1rem;
             }
             
             .video-thumbnail {
-                height: 200px;
+                height: 250px;
             }
             
             .download-options {
@@ -680,23 +857,55 @@
             
             .url-input-container,
             .video-info-card {
-                padding: 1.5rem;
+                padding: 2rem;
                 margin: 1rem;
+            }
+            
+            .video-info-card {
+                padding: 2rem 1.5rem;
             }
         }
         
         @media (max-width: 480px) {
             .hero-section {
-                height: 45vh;
-                min-height: 300px;
+                height: 60vh;
+                min-height: 400px;
+            }
+            
+            .hero-title {
+                font-size: 1.875rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
             }
             
             .video-title {
-                font-size: 1.25rem;
+                font-size: 1.5rem;
             }
             
             .step-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .url-input-container {
                 padding: 1.5rem;
+            }
+            
+            .download-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 1.625rem;
+            }
+            
+            .url-input {
+                padding: 1.25rem 1.25rem 1.25rem 3rem;
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -838,15 +1047,19 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Premium Hero Section -->
     <section class="hero-section">
         <div class="content-container">
             <div class="hero-content">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                <h1 class="hero-title">
                     Download Facebook Videos
+                    <span class="block text-transparent bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text">
+                        In HD & SD Quality
+                    </span>
                 </h1>
-                <p class="text-xl md:text-2xl text-gray-100 mb-8 max-w-2xl mx-auto">
-                    Download any Facebook video in HD or SD quality. Free, fast, and no registration required.
+                
+                <p class="hero-subtitle">
+                    Instantly download any Facebook video, reel, or story. Free, fast, and unlimited downloads with no registration required.
                 </p>
                 
                 <div class="url-input-container">
@@ -855,14 +1068,33 @@
                         <input 
                             type="text" 
                             id="fbUrlInput"
-                            placeholder="Paste Facebook video URL here (e.g., https://www.facebook.com/...)"
+                            placeholder="Paste Facebook video URL here (e.g., https://www.facebook.com/watch/?v=...)"
                             class="url-input"
                         >
                     </div>
                     <button id="downloadBtn" class="download-btn">
-                        <i data-lucide="download" class="h-5 w-5 mr-2 inline"></i>
+                        <i data-lucide="download" class="h-5 w-5 mr-3 inline"></i>
                         Download Video
                     </button>
+                </div>
+                
+                <div class="mt-8 flex flex-wrap justify-center gap-4 text-sm text-white/80">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shield-check" class="h-4 w-4"></i>
+                        <span>100% Free & Secure</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="zap" class="h-4 w-4"></i>
+                        <span>Fast Processing</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="smartphone" class="h-4 w-4"></i>
+                        <span>Works on All Devices</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="infinite" class="h-4 w-4"></i>
+                        <span>Unlimited Downloads</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -875,59 +1107,77 @@
                 <!-- Video info will be displayed here -->
             </div>
             
-            <div class="text-center mt-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">How to Download Facebook Videos</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-                    Follow these simple steps to download any Facebook video in seconds
+            <div class="text-center mt-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-6">How to Download Facebook Videos</h2>
+                <p class="text-gray-600 text-xl max-w-2xl mx-auto mb-12">
+                    Download any Facebook video in just 3 simple steps
                 </p>
                 
                 <div class="steps-grid">
                     <div class="step-card">
                         <div class="step-number">1</div>
-                        <i data-lucide="copy" class="h-12 w-12 text-blue-600 mb-4 mx-auto"></i>
-                        <h3 class="text-xl font-semibold mb-2">Copy Video URL</h3>
-                        <p class="text-gray-600">Go to Facebook and copy the video link from share option</p>
+                        <div class="w-20 h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="copy" class="h-10 w-10 text-blue-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Copy Video URL</h3>
+                        <p class="text-gray-600">Go to Facebook and copy the video link from the share option or address bar.</p>
                     </div>
                     
                     <div class="step-card">
                         <div class="step-number">2</div>
-                        <i data-lucide="clipboard-paste" class="h-12 w-12 text-blue-600 mb-4 mx-auto"></i>
-                        <h3 class="text-xl font-semibold mb-2">Paste URL</h3>
-                        <p class="text-gray-600">Paste the URL into the input field above</p>
+                        <div class="w-20 h-20 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="clipboard-paste" class="h-10 w-10 text-purple-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Paste URL</h3>
+                        <p class="text-gray-600">Paste the copied URL into the input field above and click "Download Video".</p>
                     </div>
                     
                     <div class="step-card">
                         <div class="step-number">3</div>
-                        <i data-lucide="download" class="h-12 w-12 text-blue-600 mb-4 mx-auto"></i>
-                        <h3 class="text-xl font-semibold mb-2">Choose Quality</h3>
-                        <p class="text-gray-600">Select HD or SD quality and download your video</p>
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="download" class="h-10 w-10 text-green-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Choose Quality & Download</h3>
+                        <p class="text-gray-600">Select your preferred quality (HD or SD) and download the video instantly.</p>
                     </div>
                 </div>
             </div>
             
             <!-- FAQ Section -->
-            <div class="mt-16 max-w-3xl mx-auto">
-                <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Frequently Asked Questions</h2>
+            <div class="mt-24 max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Frequently Asked Questions</h2>
                 
-                <div class="space-y-4">
-                    <div class="bg-white rounded-xl p-6 border border-gray-200">
-                        <h3 class="text-lg font-semibold mb-2">Is it free to use?</h3>
-                        <p class="text-gray-600">Yes, our Facebook video downloader is completely free with no hidden charges or registration required.</p>
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-8 border border-gray-200 hover:border-blue-200 transition-all">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-3">
+                            <i data-lucide="help-circle" class="h-6 w-6 text-blue-600"></i>
+                            Is it free to use?
+                        </h3>
+                        <p class="text-gray-600 text-lg">Yes, our Facebook video downloader is completely free with no hidden charges, watermarks, or registration required. You can download unlimited videos without any restrictions.</p>
                     </div>
                     
-                    <div class="bg-white rounded-xl p-6 border border-gray-200">
-                        <h3 class="text-lg font-semibold mb-2">What video qualities are available?</h3>
-                        <p class="text-gray-600">You can download videos in both HD (High Definition) and SD (Standard Definition) quality, depending on what's available from the source.</p>
+                    <div class="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-8 border border-gray-200 hover:border-purple-200 transition-all">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-3">
+                            <i data-lucide="tv" class="h-6 w-6 text-purple-600"></i>
+                            What video qualities are available?
+                        </h3>
+                        <p class="text-gray-600 text-lg">You can download videos in both HD (High Definition) and SD (Standard Definition) quality, depending on what's available from the source video. The tool automatically detects available qualities.</p>
                     </div>
                     
-                    <div class="bg-white rounded-xl p-6 border border-gray-200">
-                        <h3 class="text-lg font-semibold mb-2">Does it work on mobile?</h3>
-                        <p class="text-gray-600">Yes, our downloader is fully responsive and works perfectly on all devices including smartphones and tablets.</p>
+                    <div class="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-8 border border-gray-200 hover:border-green-200 transition-all">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-3">
+                            <i data-lucide="smartphone" class="h-6 w-6 text-green-600"></i>
+                            Does it work on mobile devices?
+                        </h3>
+                        <p class="text-gray-600 text-lg">Yes, our downloader is fully responsive and works perfectly on all devices including smartphones, tablets, and desktop computers. No app installation required.</p>
                     </div>
                     
-                    <div class="bg-white rounded-xl p-6 border border-gray-200">
-                        <h3 class="text-lg font-semibold mb-2">Are downloads private?</h3>
-                        <p class="text-gray-600">Yes, all downloads are processed securely and we don't store any videos on our servers.</p>
+                    <div class="bg-gradient-to-r from-gray-50 to-white rounded-2xl p-8 border border-gray-200 hover:border-red-200 transition-all">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-3">
+                            <i data-lucide="shield" class="h-6 w-6 text-red-600"></i>
+                            Are downloads private and secure?
+                        </h3>
+                        <p class="text-gray-600 text-lg">Yes, all downloads are processed securely. We don't store any videos on our servers, and your download activity remains completely private.</p>
                     </div>
                 </div>
             </div>
@@ -1037,7 +1287,10 @@
 
     <!-- Notification Element -->
     <div id="notification" class="notification">
-        <p id="notificationMessage">Download started successfully!</p>
+        <div class="notification-icon">
+            <i data-lucide="check-circle" class="h-6 w-6 text-green-500"></i>
+        </div>
+        <p id="notificationMessage" class="font-medium">Download started successfully!</p>
     </div>
 
     <!-- JavaScript -->
@@ -1061,21 +1314,38 @@
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const messageEl = document.getElementById('notificationMessage');
+            const icon = notification.querySelector('.notification-icon i');
             
             messageEl.textContent = message;
             notification.className = 'notification';
             
+            // Update icon based on type
             if (type === 'error') {
                 notification.classList.add('error');
+                icon.setAttribute('data-lucide', 'alert-circle');
+                icon.classList.remove('text-green-500');
+                icon.classList.add('text-red-500');
             } else if (type === 'warning') {
                 notification.classList.add('warning');
+                icon.setAttribute('data-lucide', 'alert-triangle');
+                icon.classList.remove('text-green-500');
+                icon.classList.add('text-yellow-500');
+            } else {
+                icon.setAttribute('data-lucide', 'check-circle');
+                icon.classList.remove('text-red-500', 'text-yellow-500');
+                icon.classList.add('text-green-500');
             }
             
+            // Update icon
+            lucide.createIcons();
+            
+            // Show notification
             notification.classList.add('show');
             
+            // Hide after 4 seconds
             setTimeout(() => {
                 notification.classList.remove('show');
-            }, 3000);
+            }, 4000);
         }
 
         // ========== FACEBOOK VIDEO DOWNLOADER ==========
@@ -1089,7 +1359,8 @@
                 /(?:https?:\/\/)?(?:www\.)?facebook\.com\/.*\/videos\/.*/,
                 /(?:https?:\/\/)?(?:www\.)?facebook\.com\/.*\/video\.php\?.*/,
                 /(?:https?:\/\/)?(?:www\.)?fb\.watch\/.*/,
-                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/reel\/.*/
+                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/reel\/.*/,
+                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/watch\/\?v=.*/
             ];
             
             return patterns.some(pattern => pattern.test(url));
@@ -1115,13 +1386,16 @@
             } finally {
                 downloadBtn.disabled = false;
                 downloadBtn.classList.remove('loading');
-                downloadBtn.innerHTML = '<i data-lucide="download" class="h-5 w-5 mr-2 inline"></i>Download Video';
+                downloadBtn.innerHTML = '<i data-lucide="download" class="h-5 w-5 mr-3 inline"></i>Download Video';
             }
         }
         
         // Display video info
         function displayVideoInfo(videoData) {
             const { title, thumbnail, urls } = videoData;
+            
+            // Encode title for URL
+            const encodedTitle = encodeURIComponent(title);
             
             const videoInfoHTML = `
                 ${thumbnail ? `
@@ -1132,26 +1406,30 @@
                 
                 <div class="download-options">
                     ${urls.hd ? `
-                        <div class="download-option" onclick="downloadVideo('${urls.hd}', '${title}', 'hd')">
+                        <div class="download-option">
                             <span class="quality-badge hd">HD QUALITY</span>
                             <h4>High Definition</h4>
                             <p>Best quality video with 720p/1080p resolution</p>
-                            <button class="cta-button w-full">
+                            <a href="/api/fb-download?url=${encodeURIComponent(urls.hd)}&title=${encodedTitle}" 
+                               download="${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_hd.mp4"
+                               class="cta-button w-full inline-flex items-center justify-center no-underline">
                                 <i data-lucide="download" class="h-4 w-4 mr-2"></i>
                                 Download HD
-                            </button>
+                            </a>
                         </div>
                     ` : ''}
                     
                     ${urls.sd ? `
-                        <div class="download-option" onclick="downloadVideo('${urls.sd}', '${title}', 'sd')">
+                        <div class="download-option">
                             <span class="quality-badge sd">SD QUALITY</span>
                             <h4>Standard Definition</h4>
                             <p>Good quality video with smaller file size</p>
-                            <button class="cta-button w-full">
+                            <a href="/api/fb-download?url=${encodeURIComponent(urls.sd)}&title=${encodedTitle}" 
+                               download="${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_sd.mp4"
+                               class="cta-button w-full inline-flex items-center justify-center no-underline">
                                 <i data-lucide="download" class="h-4 w-4 mr-2"></i>
                                 Download SD
-                            </button>
+                            </a>
                         </div>
                     ` : ''}
                 </div>
@@ -1159,7 +1437,7 @@
                 ${!urls.hd && !urls.sd ? `
                     <div class="text-center py-8">
                         <i data-lucide="alert-circle" class="h-16 w-16 text-yellow-500 mx-auto mb-4"></i>
-                        <p class="text-gray-600">No download links available for this video.</p>
+                        <p class="text-gray-600 text-lg">No download links available for this video. The video might be private or restricted.</p>
                     </div>
                 ` : ''}
             `;
@@ -1168,33 +1446,12 @@
             videoInfoCard.classList.add('show');
             
             // Scroll to video info
-            videoInfoCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                videoInfoCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
             
             // Re-initialize Lucide icons for new content
             lucide.createIcons();
-        }
-        
-        // Download video function
-        function downloadVideo(videoUrl, title, quality) {
-            try {
-                showNotification(`Starting ${quality.toUpperCase()} download...`, 'success');
-                
-                // Create a temporary link element
-                const link = document.createElement('a');
-                link.href = `/api/fb-download?url=${encodeURIComponent(videoUrl)}&title=${encodeURIComponent(title)}`;
-                link.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${quality}.mp4`;
-                link.target = '_blank';
-                
-                // Append to body, click, and remove
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                showNotification(`Download started! Your video will save as "${link.download}"`, 'success');
-            } catch (error) {
-                console.error('Download error:', error);
-                showNotification('Failed to start download. Please try again.', 'error');
-            }
         }
         
         // Handle download button click
@@ -1208,13 +1465,14 @@
             }
             
             if (!isValidFacebookUrl(url)) {
-                showNotification('Please enter a valid Facebook video URL', 'error');
+                showNotification('Please enter a valid Facebook video URL. Make sure it includes "facebook.com" and points to a video.', 'error');
                 return;
             }
             
             try {
                 const videoData = await fetchVideoInfo(url);
                 displayVideoInfo(videoData);
+                showNotification('Video information loaded successfully! Choose your preferred quality.', 'success');
             } catch (error) {
                 console.error('Error:', error);
                 showNotification(error.message || 'Failed to fetch video. Please check the URL and try again.', 'error');
@@ -1268,6 +1526,20 @@
                 }
             } catch (err) {
                 // Clipboard access might be blocked, ignore
+            }
+        });
+        
+        // ========== INPUT VALIDATION STYLING ==========
+        fbUrlInput.addEventListener('input', function() {
+            if (isValidFacebookUrl(this.value)) {
+                this.style.borderColor = '#10b981';
+                this.style.boxShadow = '0 0 0 4px rgba(16, 185, 129, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.05)';
+            } else if (this.value.length > 10) {
+                this.style.borderColor = '#ef4444';
+                this.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.05)';
+            } else {
+                this.style.borderColor = '#e2e8f0';
+                this.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.05)';
             }
         });
     </script>
