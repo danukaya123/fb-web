@@ -13,7 +13,8 @@ module.exports = async function handler(req, res) {
     const q = (req.query.q || "").toString().trim();
     if (!q) return res.status(400).json({ ok: false, message: "Missing `q` parameter" });
 
-    const fbRegex = /(https?:\/\/)?(www\.)?(facebook|fb)\.com\/.+/;
+    // In fb-info.js, replace the fbRegex line with:
+const fbRegex = /(https?:\/\/)?(www\.|m\.)?(facebook|fb)\.com\/(share\/v\/|reel\/|watch\/\?v=|.+\/videos\/|video\.php\?|fb\.watch\/|stories\/|groups\/.+\/permalink\/).+/;
     if (!fbRegex.test(q)) return res.status(400).json({ ok: false, message: "Invalid Facebook URL" });
 
     const result = await getFbVideoInfo(q);
