@@ -1496,17 +1496,42 @@
         const videoInfoCard = document.getElementById('videoInfoCard');
         
         // Validate Facebook URL
-        function isValidFacebookUrl(url) {
-            const patterns = [
-                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/.*\/videos\/.*/,
-                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/.*\/video\.php\?.*/,
-                /(?:https?:\/\/)?(?:www\.)?fb\.watch\/.*/,
-                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/reel\/.*/,
-                /(?:https?:\/\/)?(?:www\.)?facebook\.com\/watch\/\?v=.*/
-            ];
-            
-            return patterns.some(pattern => pattern.test(url));
-        }
+// Validate Facebook URL - UPDATED FOR NEW FB URL FORMATS
+function isValidFacebookUrl(url) {
+    const patterns = [
+        // New format: https://www.facebook.com/share/v/xxxxxxxxx/
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/share\/v\/.+\//,
+        
+        // Reels format
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/reel\/.+/,
+        
+        // Watch format
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/watch\/\?v=.+/,
+        
+        // Video format
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/.+\/videos\/.+/,
+        
+        // Video.php format
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/.+\/video\.php\?.*/,
+        
+        // fb.watch format
+        /(?:https?:\/\/)?(?:www\.|m\.)?fb\.watch\/.+/,
+        
+        // Mobile format
+        /(?:https?:\/\/)?(?:m\.)?facebook\.com\/.+\/videos\/.+/,
+        
+        // Shortened format
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/video\.php\?.*/,
+        
+        // Group videos
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/groups\/.+\/permalink\/.+/,
+        
+        // Stories format (if applicable)
+        /(?:https?:\/\/)?(?:www\.|m\.)?facebook\.com\/stories\/.+/
+    ];
+    
+    return patterns.some(pattern => pattern.test(url));
+}
         
         // Fetch video info from your API
         async function fetchVideoInfo(url) {
